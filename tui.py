@@ -1,6 +1,6 @@
 import curses
 
-class Scree:
+class Screen:
     def __init__(self,win):
         self.win = win
         self.max_y,self.max_x = win.getmaxyx()
