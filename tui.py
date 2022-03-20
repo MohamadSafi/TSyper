@@ -1,6 +1,6 @@
 import curses
 
-class Screen:
+class Scree:
     def __init__(self,win):
         self.win = win
         self.max_y,self.max_x = win.getmaxyx()
@@ -13,28 +13,33 @@ class Screen:
         if row >= self.max_y or col >= self.max_x:
             return
         self.win.addstr(row, col, msg, color)
-
+        self.win.refresh()
 class Dialog(Screen):
 
     def __init__(self, win):
         super().__init__(win)
         win.border()
-    
-    def print_dialog(self, cur_text, target):
+    def clear(self):
+        super().clear()
+        self.win.border()
+
+    def print_dialog(self, cur_text, target,correct_color, wrong_color):
         cur_row = 1
         cur_col = 1
-        max_col = 0
+        max_col = 1
         for i, char in enumerate(target):
             
-            if char == "\n" :
+            if char == "\n" or cur_col+1 >= self.max_x :
                 cur_col = 1
                 cur_row += 1
                 continue
            
-            if cur_row + 10 >= self.max_y:
+            if cur_row + 1 >= self.max_y:
                 break
-           
-            self.print(cur_row, cur_col, char)
+            try: 
+                self.print(cur_row, cur_col, char)
+            except:
+                exit(1)
             cur_col += 1
 
             if cur_col > max_col:
@@ -47,15 +52,15 @@ class Dialog(Screen):
         
         for i, char in enumerate(cur_text):
             correct_char = target[i]
-            color = curses.color_pair(1)
+            color = correct_color
             
-            if char == "\n":
-                cur_col = 0
+            if char == "\n" or cur_col+1 >= self.max_x:
+                cur_col = 1
                 cur_row += 1
                 continue
 
             if char != correct_char:
-                color=curses.color_pair(2)
+                color=wrong_color
                 char = correct_char
 
             self.print(cur_row, cur_col, char, color)
@@ -70,20 +75,26 @@ class Dialog(Screen):
             else:
                 y, x = self.win.getyx()
                 self.win.move(y+1, 0)
-
 class Status(Screen):
     def __init__(self, win):
         super().__init__(win)
-
+   
+    def print(self, msg, color = curses.COLOR_WHITE ):
+        self.clear()
+        self.win.addstr(0,0, msg, color)
+        self.win.refresh()
 class AuthorWin(Screen):
     def __init__(self, win):
         super().__init__(win)
-
+        
     def print(self, author = "",color = curses.COLOR_WHITE):
         author = "-- "+author
         col = self.max_x - len(author)
         if col < 0:
             col = 0
-        self.win.addstr(0, col, author, color)
-
+        try: 
+            self.win.addstr(0, col, author, color)
+            self.win.refresh()
+        except: 
+            exit(1)
 
