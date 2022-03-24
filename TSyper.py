@@ -66,10 +66,9 @@ class Tsyper:
                 self.dialog.clear()
                 continue
 
-            self.statusbar.print(msg = "You completed the text! Press Enter to try again...")
+            self.statusbar.print(msg = f"You completed the text! your WPM is {wpm} | Press Enter to try again...")
             self.win.nodelay(False)
             key = self.win.getkey()
-
 
     def load_quotes(self):
         with open("quotes.json","r") as file:
@@ -87,6 +86,7 @@ class Tsyper:
         target = quote[0]
         author = quote[1]
         current = []
+        global wpm
         wpm = 0
         start_time = time.time()
         start_timer = False
