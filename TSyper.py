@@ -29,6 +29,7 @@ WIN_WIDTH = 100
 
 
 class Tsyper:
+
     def __init__(self, stdscr):
         if len(sys.argv) > 1:
             quote_type = sys.argv[1]
@@ -56,20 +57,19 @@ class Tsyper:
         self.statusbar = Status(self.win.subwin(STATUS_HEIGHT,WIN_WIDTH,STATUS_BEGIN,0))
 
         while True:
+            self.dialog.clear()
+            self.author_win.clear()
             quote = self.get_random_quote(quote_type)
             test_res = self.wpm_test(quote)
 
             if test_res  == EXIT:
                 break
             elif test_res == NEW_QUOTE:
-                self.author_win.clear()
-                self.dialog.clear()
                 continue
 
             self.statusbar.print(msg = f"You completed the text! your WPM is {wpm} | Press Enter to try again...")
             self.win.nodelay(False)
             key = self.win.getkey()
-            self.dialog.clear()
 
     def load_quotes(self):
         with open("quotes.json","r") as file:

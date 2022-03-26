@@ -19,6 +19,7 @@ class Dialog(Screen):
     def __init__(self, win):
         super().__init__(win)
         win.border()
+
     def clear(self):
         super().clear()
         self.win.border()
@@ -75,6 +76,7 @@ class Dialog(Screen):
             else:
                 y, x = self.win.getyx()
                 self.win.move(y+1, 0)
+
 class Status(Screen):
     def __init__(self, win):
         super().__init__(win)
