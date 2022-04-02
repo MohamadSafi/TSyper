@@ -62,7 +62,7 @@ class Dialog(Screen):
 
             if char != correct_char:
                 color=wrong_color
-                char = correct_char
+                char = corect_char
 
             self.print(cur_row, cur_col, char, color)
             cur_col += 1
