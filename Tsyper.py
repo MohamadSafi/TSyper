@@ -5,7 +5,7 @@ import json
 import random
 import sys
 import logging
-from tui import Screen, Dialog, Status, AuthorWin
+from tui import Screen, Dialog, Status, AuthorWin, Instruction
     
 logging.basicConfig(filename = "TST.log", filemode = "w", format = "[%(levelname)s] - %(asctime)s - %(message)s")
 logger = logging.getLogger()
@@ -25,7 +25,10 @@ AUTHOR_WIN_HEIGHT = 2
 AUTHOR_WIN_BEGIN = DIALOG_HEIGHT + PADDING
 STATUS_HEIGHT = 2
 STATUS_BEGIN = AUTHOR_WIN_BEGIN + PADDING
+INSTRUCTION_HEIGHT = 6
+INSTRUCTION_BEGIN = STATUS_BEGIN + PADDING + 2
 WIN_WIDTH = 100
+
 
 
 class Tsyper:
@@ -40,10 +43,12 @@ class Tsyper:
         self.max_y,self.max_x = self.win.getmaxyx()
         curses.use_default_colors()
         curses.curs_set(0)
+        curses.init_color(60,255,255,255)
         curses.init_pair(1,curses.COLOR_GREEN,curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_BLACK,curses.COLOR_RED)
+        curses.init_pair(2,curses.COLOR_BLACK,curses.COLOR_RED)
         curses.init_pair(3,curses.COLOR_WHITE,curses.COLOR_BLACK)
         curses.init_pair(4,curses.COLOR_YELLOW,-1)
+        curses.init_pair(5,60,-1)
         
         if self.max_x < MIN_TERM_WIDTH or self.max_y < MIN_TERM_HEIGHT:
             self.win.addstr(0,0,"Open a bigger terminal Please", curses.color_pair(2) )
@@ -55,6 +60,7 @@ class Tsyper:
         self.dialog = Dialog(self.win.subwin(DIALOG_HEIGHT,WIN_WIDTH,0,0))
         self.author_win = AuthorWin(self.win.subwin(AUTHOR_WIN_HEIGHT,WIN_WIDTH,AUTHOR_WIN_BEGIN,0))
         self.statusbar = Status(self.win.subwin(STATUS_HEIGHT,WIN_WIDTH,STATUS_BEGIN,0))
+        self.instruction = Instruction(self.win.subwin(INSTRUCTION_HEIGHT,50,INSTRUCTION_BEGIN,0))
 
         while True:
             self.dialog.clear()
@@ -102,6 +108,7 @@ class Tsyper:
             self.dialog.print_dialog(current, target,curses.color_pair(1),curses.color_pair(2))
             self.author_win.print(author = author)
             self.statusbar.print(msg = "WPM:{}".format(wpm))
+            self.instruction.print_instr("INSTRUCTIONS WILL APEAR HERE",curses.color_pair(5))
 
             if not current:
                 msg = "Press TAB to change the text, ESC to Exit or Any key to start typing"

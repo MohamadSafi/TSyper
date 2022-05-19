@@ -62,7 +62,7 @@ class Dialog(Screen):
 
             if char != correct_char:
                 color=wrong_color
-                char = corect_char
+                char = correct_char
 
             self.print(cur_row, cur_col, char, color)
             cur_col += 1
@@ -99,4 +99,25 @@ class AuthorWin(Screen):
             self.win.refresh()
         except: 
             exit(1)
+
+class Instruction(Dialog):
+    def __init__(self,win):
+        super().__init__(win)
+        win.border()
+    
+    def clear(self):
+        super().clear()
+        self.win.border()
+
+    def print_instr(self, instr, color):
+
+        
+
+        cur_row = 1
+        cur_col = 1
+        max_col = 1
+        self.clear()
+        self.win.addstr(cur_row,cur_col,instr,color)
+        self.win.refresh()
+
 
